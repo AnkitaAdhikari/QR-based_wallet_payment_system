@@ -23,36 +23,24 @@ public class JwtUtil {
 
 	// ✅ Generate token with email + role
 	public String generateToken(String email) {
-		User user = userRepository.findByEmail(email)
-				.orElseThrow(() -> new RuntimeException("User not found"));
+		User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
 
 		Map<String, Object> claims = new HashMap<>();
-		claims.put("role", user.getRole());  // Add role to JWT
+		claims.put("role", user.getRole()); // Add role to JWT
 
-		return Jwts.builder()
-				.setClaims(claims)
-				.setSubject(email)
-				.setIssuedAt(new Date())
+		return Jwts.builder().setClaims(claims).setSubject(email).setIssuedAt(new Date())
 				.setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.DAYS)))
-				.signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-				.compact();
+				.signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
 	}
 
 	// ✅ Get email from token
 	public String extractEmail(String token) {
-		return Jwts.parser()
-				.setSigningKey(SECRET_KEY)
-				.parseClaimsJws(token)
-				.getBody()
-				.getSubject();
+		return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().getSubject();
 	}
 
 	// ✅ Get role from token
 	public String extractRole(String token) {
-		Claims claims = Jwts.parser()
-				.setSigningKey(SECRET_KEY)
-				.parseClaimsJws(token)
-				.getBody();
+		Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
 		return claims.get("role", String.class);
 	}
 

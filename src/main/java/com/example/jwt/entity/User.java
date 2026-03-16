@@ -2,11 +2,7 @@ package com.example.jwt.entity;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -25,19 +21,32 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(nullable = false, unique = true)
 	private String username;
 
+	@Column(nullable = false, unique = true)
 	private String email;
 
 	@JsonIgnore
+	@Column(nullable = false)
 	private String password;
 
-	private String role; // e.g., "ROLE_ADMIN", "ROLE_USER"
+	@Column(nullable = false)
+	private String role;
 
+	@Column(name = "balance")
+	private Double balance = 0.0; // wallet balance
+
+	@Column(name = "created_at")
 	private LocalDateTime createdAt = LocalDateTime.now();
 
+	@Column(name = "verification_code")
 	private String verificationCode;
+
+	@Column(name = "verification_expiry")
 	private LocalDateTime verificationExpiry;
+
+	@Column(name = "enabled")
 	private Boolean enabled = false;
 
 	public Long getId() {
@@ -78,6 +87,14 @@ public class User {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public Double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(Double balance) {
+		this.balance = balance;
 	}
 
 	public LocalDateTime getCreatedAt() {

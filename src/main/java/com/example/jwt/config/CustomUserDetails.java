@@ -3,6 +3,7 @@ package com.example.jwt.config;
 import com.example.jwt.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -21,7 +22,7 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.singleton(() -> user.getRole());
+		return Collections.singleton(new SimpleGrantedAuthority(user.getRole()));
 	}
 
 	@Override
@@ -51,6 +52,6 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return user.getEnabled();
 	}
 }
