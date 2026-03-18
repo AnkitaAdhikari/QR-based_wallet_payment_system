@@ -20,14 +20,14 @@ jobs:
       - name: Build with Maven
         run: mvn -B clean install -DskipTests
 
-      # ✅ Build Docker Image (ONLY ONE)
-      - name: Build Docker Image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/qr-wallet-app:latest .
-
-      # ✅ Login Docker Hub
+      # ✅ LOGIN FIRST (FIX)
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      # ✅ Push Image
+      # ✅ THEN BUILD
+      - name: Build Docker Image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/qr-wallet-app:latest .
+
+      # ✅ THEN PUSH
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/qr-wallet-app:latest
