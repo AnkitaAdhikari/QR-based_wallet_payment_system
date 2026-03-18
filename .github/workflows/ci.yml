@@ -20,11 +20,7 @@ jobs:
       - name: Build with Maven
         run: mvn -B clean install -DskipTests
 
-      # ✅ Docker Build
-      - name: Build Docker Image
-        run: docker build -t qr-wallet-app .
-
-      # ✅ Build Docker Image
+      # ✅ Build Docker Image (ONLY ONE)
       - name: Build Docker Image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/qr-wallet-app:latest .
 
